@@ -1,7 +1,7 @@
 import Foundation
 
 enum EventStorage {
-    static let appGroupIdentifier = "group.com.local.DayMarks"
+    static let appGroupIdentifier = "group.com.aramco.cycomm"
     static let eventsFileName = "events.json"
     static let coversDirectoryName = "Covers"
 
