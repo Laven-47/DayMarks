@@ -13,7 +13,6 @@ jobs:
       SCHEME: DayMarks
       CONFIGURATION: Release
       APP_BUNDLE_ID: com.aramco.cycomm
-      WIDGET_BUNDLE_ID: com.aramco.cycomm.widget
       ARCHIVE_PATH: ${{ github.workspace }}/build/DayMarks.xcarchive
       EXPORT_PATH: ${{ github.workspace }}/build/export
       KEYCHAIN_PATH: ${{ github.workspace }}/daymarks-signing.keychain-db
@@ -33,23 +32,20 @@ jobs:
           IOS_CERTIFICATE_BASE64: ${{ secrets.IOS_CERTIFICATE_BASE64 }}
           IOS_CERTIFICATE_PASSWORD: ${{ secrets.IOS_CERTIFICATE_PASSWORD }}
           IOS_PROVISION_PROFILE_BASE64: ${{ secrets.IOS_PROVISION_PROFILE_BASE64 }}
-          IOS_WIDGET_PROVISION_PROFILE_BASE64: ${{ secrets.IOS_WIDGET_PROVISION_PROFILE_BASE64 }}
           KEYCHAIN_PASSWORD: ${{ secrets.KEYCHAIN_PASSWORD }}
         run: |
           set -euo pipefail
 
-          if [[ -z "${IOS_CERTIFICATE_BASE64}" || -z "${IOS_CERTIFICATE_PASSWORD}" || -z "${IOS_PROVISION_PROFILE_BASE64}" || -z "${IOS_WIDGET_PROVISION_PROFILE_BASE64}" || -z "${KEYCHAIN_PASSWORD}" ]]; then
+          if [[ -z "${IOS_CERTIFICATE_BASE64}" || -z "${IOS_CERTIFICATE_PASSWORD}" || -z "${IOS_PROVISION_PROFILE_BASE64}" || -z "${KEYCHAIN_PASSWORD}" ]]; then
             echo "Missing signing secrets. See README.md for the required GitHub Actions secrets."
             exit 1
           fi
 
           CERTIFICATE_PATH="${RUNNER_TEMP}/certificate.p12"
           APP_PROFILE_PATH="${RUNNER_TEMP}/DayMarks.mobileprovision"
-          WIDGET_PROFILE_PATH="${RUNNER_TEMP}/DayMarksWidget.mobileprovision"
 
           echo "${IOS_CERTIFICATE_BASE64}" | base64 --decode > "${CERTIFICATE_PATH}"
           echo "${IOS_PROVISION_PROFILE_BASE64}" | base64 --decode > "${APP_PROFILE_PATH}"
-          echo "${IOS_WIDGET_PROVISION_PROFILE_BASE64}" | base64 --decode > "${WIDGET_PROFILE_PATH}"
 
           security create-keychain -p "${KEYCHAIN_PASSWORD}" "${KEYCHAIN_PATH}"
           security set-keychain-settings -lut 21600 "${KEYCHAIN_PATH}"
@@ -59,15 +55,9 @@ jobs:
 
           mkdir -p "${HOME}/Library/MobileDevice/Provisioning Profiles"
           APP_PROFILE_UUID=$(/usr/libexec/PlistBuddy -c "Print UUID" /dev/stdin <<< "$(security cms -D -i "${APP_PROFILE_PATH}")")
-          WIDGET_PROFILE_UUID=$(/usr/libexec/PlistBuddy -c "Print UUID" /dev/stdin <<< "$(security cms -D -i "${WIDGET_PROFILE_PATH}")")
           APP_PROFILE_NAME=$(/usr/libexec/PlistBuddy -c "Print Name" /dev/stdin <<< "$(security cms -D -i "${APP_PROFILE_PATH}")")
-          WIDGET_PROFILE_NAME=$(/usr/libexec/PlistBuddy -c "Print Name" /dev/stdin <<< "$(security cms -D -i "${WIDGET_PROFILE_PATH}")")
           cp "${APP_PROFILE_PATH}" "${HOME}/Library/MobileDevice/Provisioning Profiles/${APP_PROFILE_UUID}.mobileprovision"
-          cp "${WIDGET_PROFILE_PATH}" "${HOME}/Library/MobileDevice/Provisioning Profiles/${WIDGET_PROFILE_UUID}.mobileprovision"
-          {
-            echo "APP_PROVISIONING_PROFILE_SPECIFIER=${APP_PROFILE_NAME}"
-            echo "WIDGET_PROVISIONING_PROFILE_SPECIFIER=${WIDGET_PROFILE_NAME}"
-          } >> "${GITHUB_ENV}"
+          echo "APP_PROVISIONING_PROFILE_SPECIFIER=${APP_PROFILE_NAME}" >> "${GITHUB_ENV}"
 
       - name: Create export options
         env:
@@ -90,8 +80,6 @@ jobs:
             <dict>
               <key>${APP_BUNDLE_ID}</key>
               <string>${APP_PROVISIONING_PROFILE_SPECIFIER}</string>
-              <key>${WIDGET_BUNDLE_ID}</key>
-              <string>${WIDGET_PROVISIONING_PROFILE_SPECIFIER}</string>
             </dict>
             <key>stripSwiftSymbols</key>
             <true/>
@@ -127,7 +115,7 @@ jobs:
       - name: Upload IPA artifact
         uses: actions/upload-artifact@v4
         with:
-          name: DayMarks-development-ipa
+          name: DayMarks-enterprise-ipa
           path: build/export/*.ipa
           if-no-files-found: error
 
