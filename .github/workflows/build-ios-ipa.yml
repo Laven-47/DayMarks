@@ -2,17 +2,6 @@ name: Build iOS IPA
 
 on:
   workflow_dispatch:
-    inputs:
-      export_method:
-        description: "Export method: development, ad-hoc, app-store, or enterprise"
-        required: true
-        default: "development"
-        type: choice
-        options:
-          - development
-          - ad-hoc
-          - app-store
-          - enterprise
 
 jobs:
   build:
@@ -92,7 +81,7 @@ jobs:
           <plist version="1.0">
           <dict>
             <key>method</key>
-            <string>${{ inputs.export_method }}</string>
+            <string>development</string>
             <key>teamID</key>
             <string>${APPLE_TEAM_ID}</string>
             <key>signingStyle</key>
@@ -138,7 +127,7 @@ jobs:
       - name: Upload IPA artifact
         uses: actions/upload-artifact@v4
         with:
-          name: DayMarks-${{ inputs.export_method }}-ipa
+          name: DayMarks-development-ipa
           path: build/export/*.ipa
           if-no-files-found: error
 
