@@ -12,8 +12,8 @@ jobs:
       PROJECT_PATH: DayMarks.xcodeproj
       SCHEME: DayMarks
       CONFIGURATION: Release
-      APP_BUNDLE_ID: com.local.DayMarks
-      WIDGET_BUNDLE_ID: com.local.DayMarks.widget
+      APP_BUNDLE_ID: com.aramco.cycomm
+      WIDGET_BUNDLE_ID: com.aramco.cycomm.widget
       ARCHIVE_PATH: ${{ github.workspace }}/build/DayMarks.xcarchive
       EXPORT_PATH: ${{ github.workspace }}/build/export
       KEYCHAIN_PATH: ${{ github.workspace }}/daymarks-signing.keychain-db
@@ -81,7 +81,7 @@ jobs:
           <plist version="1.0">
           <dict>
             <key>method</key>
-            <string>development</string>
+            <string>enterprise</string>
             <key>teamID</key>
             <string>${APPLE_TEAM_ID}</string>
             <key>signingStyle</key>
