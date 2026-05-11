@@ -16,7 +16,7 @@ jobs:
       WIDGET_BUNDLE_ID: com.local.DayMarks.widget
       ARCHIVE_PATH: ${{ github.workspace }}/build/DayMarks.xcarchive
       EXPORT_PATH: ${{ github.workspace }}/build/export
-      KEYCHAIN_PATH: ${{ runner.temp }}/daymarks-signing.keychain-db
+      KEYCHAIN_PATH: ${{ github.workspace }}/daymarks-signing.keychain-db
 
     steps:
       - name: Checkout
