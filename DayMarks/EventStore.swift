@@ -2,7 +2,6 @@ import Foundation
 import PhotosUI
 import SwiftUI
 import UserNotifications
-import WidgetKit
 
 @MainActor
 final class EventStore: ObservableObject {
@@ -64,7 +63,6 @@ final class EventStore: ObservableObject {
 
     private func persist() {
         try? EventStorage.saveEvents(events)
-        WidgetCenter.shared.reloadAllTimelines()
     }
 
     private func scheduleReminder(for event: CountdownEvent) {
