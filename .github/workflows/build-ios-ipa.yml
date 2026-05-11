@@ -1,0 +1,147 @@
+name: Build iOS IPA
+
+on:
+  workflow_dispatch:
+    inputs:
+      export_method:
+        description: "Export method: development, ad-hoc, app-store, or enterprise"
+        required: true
+        default: "development"
+        type: choice
+        options:
+          - development
+          - ad-hoc
+          - app-store
+          - enterprise
+
+jobs:
+  build:
+    name: Archive and export IPA
+    runs-on: macos-15
+
+    env:
+      PROJECT_PATH: DayMarks.xcodeproj
+      SCHEME: DayMarks
+      CONFIGURATION: Release
+      ARCHIVE_PATH: ${{ github.workspace }}/build/DayMarks.xcarchive
+      EXPORT_PATH: ${{ github.workspace }}/build/export
+      KEYCHAIN_PATH: ${{ runner.temp }}/daymarks-signing.keychain-db
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Select Xcode
+        run: |
+          set -euo pipefail
+          sudo xcode-select -s "$(ls -d /Applications/Xcode*.app | sort -V | tail -n 1)"
+          xcodebuild -version
+
+      - name: Configure signing assets
+        env:
+          IOS_CERTIFICATE_BASE64: ${{ secrets.IOS_CERTIFICATE_BASE64 }}
+          IOS_CERTIFICATE_PASSWORD: ${{ secrets.IOS_CERTIFICATE_PASSWORD }}
+          IOS_PROVISION_PROFILE_BASE64: ${{ secrets.IOS_PROVISION_PROFILE_BASE64 }}
+          IOS_WIDGET_PROVISION_PROFILE_BASE64: ${{ secrets.IOS_WIDGET_PROVISION_PROFILE_BASE64 }}
+          KEYCHAIN_PASSWORD: ${{ secrets.KEYCHAIN_PASSWORD }}
+        run: |
+          set -euo pipefail
+
+          if [[ -z "${IOS_CERTIFICATE_BASE64}" || -z "${IOS_CERTIFICATE_PASSWORD}" || -z "${IOS_PROVISION_PROFILE_BASE64}" || -z "${IOS_WIDGET_PROVISION_PROFILE_BASE64}" || -z "${KEYCHAIN_PASSWORD}" ]]; then
+            echo "Missing signing secrets. See README.md for the required GitHub Actions secrets."
+            exit 1
+          fi
+
+          CERTIFICATE_PATH="${RUNNER_TEMP}/certificate.p12"
+          APP_PROFILE_PATH="${RUNNER_TEMP}/DayMarks.mobileprovision"
+          WIDGET_PROFILE_PATH="${RUNNER_TEMP}/DayMarksWidget.mobileprovision"
+
+          echo "${IOS_CERTIFICATE_BASE64}" | base64 --decode > "${CERTIFICATE_PATH}"
+          echo "${IOS_PROVISION_PROFILE_BASE64}" | base64 --decode > "${APP_PROFILE_PATH}"
+          echo "${IOS_WIDGET_PROVISION_PROFILE_BASE64}" | base64 --decode > "${WIDGET_PROFILE_PATH}"
+
+          security create-keychain -p "${KEYCHAIN_PASSWORD}" "${KEYCHAIN_PATH}"
+          security set-keychain-settings -lut 21600 "${KEYCHAIN_PATH}"
+          security unlock-keychain -p "${KEYCHAIN_PASSWORD}" "${KEYCHAIN_PATH}"
+          security import "${CERTIFICATE_PATH}" -P "${IOS_CERTIFICATE_PASSWORD}" -A -t cert -f pkcs12 -k "${KEYCHAIN_PATH}"
+          security list-keychain -d user -s "${KEYCHAIN_PATH}"
+
+          mkdir -p "${HOME}/Library/MobileDevice/Provisioning Profiles"
+          APP_PROFILE_UUID=$(/usr/libexec/PlistBuddy -c "Print UUID" /dev/stdin <<< "$(security cms -D -i "${APP_PROFILE_PATH}")")
+          WIDGET_PROFILE_UUID=$(/usr/libexec/PlistBuddy -c "Print UUID" /dev/stdin <<< "$(security cms -D -i "${WIDGET_PROFILE_PATH}")")
+          APP_PROFILE_NAME=$(/usr/libexec/PlistBuddy -c "Print Name" /dev/stdin <<< "$(security cms -D -i "${APP_PROFILE_PATH}")")
+          WIDGET_PROFILE_NAME=$(/usr/libexec/PlistBuddy -c "Print Name" /dev/stdin <<< "$(security cms -D -i "${WIDGET_PROFILE_PATH}")")
+          cp "${APP_PROFILE_PATH}" "${HOME}/Library/MobileDevice/Provisioning Profiles/${APP_PROFILE_UUID}.mobileprovision"
+          cp "${WIDGET_PROFILE_PATH}" "${HOME}/Library/MobileDevice/Provisioning Profiles/${WIDGET_PROFILE_UUID}.mobileprovision"
+          {
+            echo "APP_PROVISIONING_PROFILE_SPECIFIER=${APP_PROFILE_NAME}"
+            echo "WIDGET_PROVISIONING_PROFILE_SPECIFIER=${WIDGET_PROFILE_NAME}"
+          } >> "${GITHUB_ENV}"
+
+      - name: Create export options
+        env:
+          APPLE_TEAM_ID: ${{ secrets.APPLE_TEAM_ID }}
+          APP_BUNDLE_ID: ${{ vars.APP_BUNDLE_ID || 'com.local.DayMarks' }}
+          WIDGET_BUNDLE_ID: ${{ vars.WIDGET_BUNDLE_ID || 'com.local.DayMarks.widget' }}
+        run: |
+          set -euo pipefail
+          mkdir -p build
+          cat > build/ExportOptions.plist <<PLIST
+          <?xml version="1.0" encoding="UTF-8"?>
+          <!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+          <plist version="1.0">
+          <dict>
+            <key>method</key>
+            <string>${{ inputs.export_method }}</string>
+            <key>teamID</key>
+            <string>${APPLE_TEAM_ID}</string>
+            <key>signingStyle</key>
+            <string>manual</string>
+            <key>provisioningProfiles</key>
+            <dict>
+              <key>${APP_BUNDLE_ID}</key>
+              <string>${APP_PROVISIONING_PROFILE_SPECIFIER}</string>
+              <key>${WIDGET_BUNDLE_ID}</key>
+              <string>${WIDGET_PROVISIONING_PROFILE_SPECIFIER}</string>
+            </dict>
+            <key>stripSwiftSymbols</key>
+            <true/>
+            <key>compileBitcode</key>
+            <false/>
+          </dict>
+          </plist>
+          PLIST
+
+      - name: Archive
+        env:
+          APPLE_TEAM_ID: ${{ secrets.APPLE_TEAM_ID }}
+        run: |
+          set -euo pipefail
+          xcodebuild archive \
+            -project "${PROJECT_PATH}" \
+            -scheme "${SCHEME}" \
+            -configuration "${CONFIGURATION}" \
+            -destination "generic/platform=iOS" \
+            -archivePath "${ARCHIVE_PATH}" \
+            DEVELOPMENT_TEAM="${APPLE_TEAM_ID}" \
+            CODE_SIGN_STYLE=Manual \
+            clean archive
+
+      - name: Export IPA
+        run: |
+          set -euo pipefail
+          xcodebuild -exportArchive \
+            -archivePath "${ARCHIVE_PATH}" \
+            -exportPath "${EXPORT_PATH}" \
+            -exportOptionsPlist build/ExportOptions.plist
+
+      - name: Upload IPA artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: DayMarks-${{ inputs.export_method }}-ipa
+          path: build/export/*.ipa
+          if-no-files-found: error
+
+      - name: Cleanup keychain
+        if: always()
+        run: security delete-keychain "${KEYCHAIN_PATH}" || true
