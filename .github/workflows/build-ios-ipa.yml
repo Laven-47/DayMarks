@@ -6,12 +6,14 @@ on:
 jobs:
   build:
     name: Archive and export IPA
-    runs-on: macos-15
+    runs-on: macos-latest
 
     env:
       PROJECT_PATH: DayMarks.xcodeproj
       SCHEME: DayMarks
       CONFIGURATION: Release
+      APP_BUNDLE_ID: com.local.DayMarks
+      WIDGET_BUNDLE_ID: com.local.DayMarks.widget
       ARCHIVE_PATH: ${{ github.workspace }}/build/DayMarks.xcarchive
       EXPORT_PATH: ${{ github.workspace }}/build/export
       KEYCHAIN_PATH: ${{ runner.temp }}/daymarks-signing.keychain-db
@@ -70,8 +72,6 @@ jobs:
       - name: Create export options
         env:
           APPLE_TEAM_ID: ${{ secrets.APPLE_TEAM_ID }}
-          APP_BUNDLE_ID: ${{ vars.APP_BUNDLE_ID || 'com.local.DayMarks' }}
-          WIDGET_BUNDLE_ID: ${{ vars.WIDGET_BUNDLE_ID || 'com.local.DayMarks.widget' }}
         run: |
           set -euo pipefail
           mkdir -p build
