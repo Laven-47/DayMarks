@@ -29,9 +29,9 @@ open DayMarks.xcodeproj
 
 为了让 App 和小组件读取同一份本地数据，需要在 Xcode 里把下面几处换成你自己的开发者配置：
 
-- 主 App Bundle ID：`com.local.DayMarks`
-- Widget Bundle ID：`com.local.DayMarks.widget`
-- App Group：`group.com.local.DayMarks`
+- 主 App Bundle ID：`com.aramco.cycomm`
+- Widget Bundle ID：`com.aramco.cycomm.widget`
+- App Group：`group.com.aramco.cycomm`
 
 替换后，确保主 App 和 Widget Extension 的 Signing & Capabilities 里都启用了同一个 App Group。
 
