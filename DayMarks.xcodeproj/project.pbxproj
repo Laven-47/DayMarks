@@ -16,39 +16,11 @@
 		010000000000000000000007 /* CountdownEvent.swift in Sources */ = {isa = PBXBuildFile; fileRef = 020000000000000000000007 /* CountdownEvent.swift */; };
 		010000000000000000000008 /* EventStorage.swift in Sources */ = {isa = PBXBuildFile; fileRef = 020000000000000000000008 /* EventStorage.swift */; };
 		010000000000000000000009 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 020000000000000000000009 /* Assets.xcassets */; };
-		01000000000000000000000A /* DayMarksWidget.swift in Sources */ = {isa = PBXBuildFile; fileRef = 02000000000000000000000A /* DayMarksWidget.swift */; };
 		01000000000000000000000B /* CountdownEvent.swift in Sources */ = {isa = PBXBuildFile; fileRef = 020000000000000000000007 /* CountdownEvent.swift */; };
 		01000000000000000000000C /* EventStorage.swift in Sources */ = {isa = PBXBuildFile; fileRef = 020000000000000000000008 /* EventStorage.swift */; };
 		01000000000000000000000D /* ColorSupport.swift in Sources */ = {isa = PBXBuildFile; fileRef = 020000000000000000000006 /* ColorSupport.swift */; };
-		01000000000000000000000E /* Widget Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 02000000000000000000000B /* Widget Assets.xcassets */; };
-		01000000000000000000000F /* DayMarksWidgetExtension.appex in Embed App Extensions */ = {isa = PBXBuildFile; fileRef = 030000000000000000000002 /* DayMarksWidgetExtension.appex */; settings = {ATTRIBUTES = (RemoveHeadersOnCopy, ); }; };
 		010000000000000000000010 /* CoverImageView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 020000000000000000000010 /* CoverImageView.swift */; };
-		010000000000000000000011 /* CoverImageView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 020000000000000000000010 /* CoverImageView.swift */; };
 /* End PBXBuildFile section */
-
-/* Begin PBXContainerItemProxy section */
-		040000000000000000000001 /* PBXContainerItemProxy */ = {
-			isa = PBXContainerItemProxy;
-			containerPortal = 090000000000000000000001 /* Project object */;
-			proxyType = 1;
-			remoteGlobalIDString = 080000000000000000000002;
-			remoteInfo = DayMarksWidgetExtension;
-		};
-/* End PBXContainerItemProxy section */
-
-/* Begin PBXCopyFilesBuildPhase section */
-		050000000000000000000001 /* Embed App Extensions */ = {
-			isa = PBXCopyFilesBuildPhase;
-			buildActionMask = 2147483647;
-			dstPath = "";
-			dstSubfolderSpec = 13;
-			files = (
-				01000000000000000000000F /* DayMarksWidgetExtension.appex in Embed App Extensions */,
-			);
-			name = "Embed App Extensions";
-			runOnlyForDeploymentPostprocessing = 0;
-		};
-/* End PBXCopyFilesBuildPhase section */
 
 /* Begin PBXFileReference section */
 		020000000000000000000001 /* DayMarksApp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DayMarksApp.swift; sourceTree = "<group>"; };
@@ -60,15 +32,10 @@
 		020000000000000000000007 /* CountdownEvent.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CountdownEvent.swift; sourceTree = "<group>"; };
 		020000000000000000000008 /* EventStorage.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EventStorage.swift; sourceTree = "<group>"; };
 		020000000000000000000009 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
-		02000000000000000000000A /* DayMarksWidget.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DayMarksWidget.swift; sourceTree = "<group>"; };
-		02000000000000000000000B /* Widget Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; name = "Widget Assets.xcassets"; path = Assets.xcassets; sourceTree = "<group>"; };
 		02000000000000000000000C /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		02000000000000000000000D /* DayMarks.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = DayMarks.entitlements; sourceTree = "<group>"; };
-		02000000000000000000000E /* Widget Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; name = "Widget Info.plist"; path = Info.plist; sourceTree = "<group>"; };
-		02000000000000000000000F /* DayMarksWidgetExtension.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = DayMarksWidgetExtension.entitlements; sourceTree = "<group>"; };
 		020000000000000000000010 /* CoverImageView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CoverImageView.swift; sourceTree = "<group>"; };
 		030000000000000000000001 /* DayMarks.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = DayMarks.app; sourceTree = BUILT_PRODUCTS_DIR; };
-		030000000000000000000002 /* DayMarksWidgetExtension.appex */ = {isa = PBXFileReference; explicitFileType = "wrapper.app-extension"; includeInIndex = 0; path = DayMarksWidgetExtension.appex; sourceTree = BUILT_PRODUCTS_DIR; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -81,7 +48,6 @@
 			isa = PBXGroup;
 			children = (
 				070000000000000000000002 /* DayMarks */,
-				070000000000000000000004 /* DayMarksWidgetExtension */,
 				070000000000000000000006 /* Products */,
 			);
 			sourceTree = "<group>";
@@ -113,22 +79,10 @@
 			path = Shared;
 			sourceTree = "<group>";
 		};
-		070000000000000000000004 /* DayMarksWidgetExtension */ = {
-			isa = PBXGroup;
-			children = (
-				02000000000000000000000A /* DayMarksWidget.swift */,
-				02000000000000000000000B /* Widget Assets.xcassets */,
-				02000000000000000000000E /* Widget Info.plist */,
-				02000000000000000000000F /* DayMarksWidgetExtension.entitlements */,
-			);
-			path = DayMarksWidgetExtension;
-			sourceTree = "<group>";
-		};
 		070000000000000000000006 /* Products */ = {
 			isa = PBXGroup;
 			children = (
 				030000000000000000000001 /* DayMarks.app */,
-				030000000000000000000002 /* DayMarksWidgetExtension.appex */,
 			);
 			name = Products;
 			sourceTree = "<group>";
@@ -143,31 +97,13 @@
 				0B0000000000000000000001 /* Sources */,
 				060000000000000000000001 /* Frameworks */,
 				0C0000000000000000000001 /* Resources */,
-				050000000000000000000001 /* Embed App Extensions */,
 			);
 			buildRules = ();
-			dependencies = (
-				0D0000000000000000000001 /* PBXTargetDependency */,
-			);
+			dependencies = ();
 			name = DayMarks;
 			productName = DayMarks;
 			productReference = 030000000000000000000001 /* DayMarks.app */;
 			productType = "com.apple.product-type.application";
-		};
-		080000000000000000000002 /* DayMarksWidgetExtension */ = {
-			isa = PBXNativeTarget;
-			buildConfigurationList = 0A0000000000000000000002 /* Build configuration list for PBXNativeTarget "DayMarksWidgetExtension" */;
-			buildPhases = (
-				0B0000000000000000000002 /* Sources */,
-				060000000000000000000002 /* Frameworks */,
-				0C0000000000000000000002 /* Resources */,
-			);
-			buildRules = ();
-			dependencies = ();
-			name = DayMarksWidgetExtension;
-			productName = DayMarksWidgetExtension;
-			productReference = 030000000000000000000002 /* DayMarksWidgetExtension.appex */;
-			productType = "com.apple.product-type.app-extension";
 		};
 /* End PBXNativeTarget section */
 
@@ -202,7 +138,6 @@
 			projectRoot = "";
 			targets = (
 				080000000000000000000001 /* DayMarks */,
-				080000000000000000000002 /* DayMarksWidgetExtension */,
 			);
 		};
 /* End PBXProject section */
@@ -213,14 +148,6 @@
 			buildActionMask = 2147483647;
 			files = (
 				010000000000000000000009 /* Assets.xcassets in Resources */,
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-		};
-		0C0000000000000000000002 /* Resources */ = {
-			isa = PBXResourcesBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-				01000000000000000000000E /* Widget Assets.xcassets in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -243,27 +170,7 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
-		0B0000000000000000000002 /* Sources */ = {
-			isa = PBXSourcesBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-				01000000000000000000000A /* DayMarksWidget.swift in Sources */,
-				01000000000000000000000B /* CountdownEvent.swift in Sources */,
-				01000000000000000000000C /* EventStorage.swift in Sources */,
-				01000000000000000000000D /* ColorSupport.swift in Sources */,
-				010000000000000000000011 /* CoverImageView.swift in Sources */,
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-		};
 /* End PBXSourcesBuildPhase section */
-
-/* Begin PBXTargetDependency section */
-		0D0000000000000000000001 /* PBXTargetDependency */ = {
-			isa = PBXTargetDependency;
-			target = 080000000000000000000002 /* DayMarksWidgetExtension */;
-			targetProxy = 040000000000000000000001 /* PBXContainerItemProxy */;
-		};
-/* End PBXTargetDependency section */
 
 /* Begin XCBuildConfiguration section */
 		0E0000000000000000000001 /* Debug */ = {
@@ -434,60 +341,6 @@
 			};
 			name = Release;
 		};
-		0E0000000000000000000005 /* Debug */ = {
-			isa = XCBuildConfiguration;
-			buildSettings = {
-				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
-				CODE_SIGN_ENTITLEMENTS = DayMarksWidgetExtension/DayMarksWidgetExtension.entitlements;
-				CODE_SIGN_STYLE = Automatic;
-				CURRENT_PROJECT_VERSION = 1;
-				DEVELOPMENT_TEAM = "";
-				GENERATE_INFOPLIST_FILE = NO;
-				INFOPLIST_FILE = DayMarksWidgetExtension/Info.plist;
-				LD_RUNPATH_SEARCH_PATHS = (
-					"$(inherited)",
-					"@executable_path/Frameworks",
-					"@executable_path/../../Frameworks",
-				);
-				APPLICATION_EXTENSION_API_ONLY = YES;
-				MARKETING_VERSION = 1.0;
-				PRODUCT_BUNDLE_IDENTIFIER = com.aramco.cycomm.widget;
-				PRODUCT_NAME = "$(TARGET_NAME)";
-				PROVISIONING_PROFILE_SPECIFIER = "$(WIDGET_PROVISIONING_PROFILE_SPECIFIER)";
-				SKIP_INSTALL = YES;
-				SWIFT_EMIT_LOC_STRINGS = YES;
-				SWIFT_VERSION = 5.0;
-				TARGETED_DEVICE_FAMILY = "1,2";
-			};
-			name = Debug;
-		};
-		0E0000000000000000000006 /* Release */ = {
-			isa = XCBuildConfiguration;
-			buildSettings = {
-				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
-				CODE_SIGN_ENTITLEMENTS = DayMarksWidgetExtension/DayMarksWidgetExtension.entitlements;
-				CODE_SIGN_STYLE = Automatic;
-				CURRENT_PROJECT_VERSION = 1;
-				DEVELOPMENT_TEAM = "";
-				GENERATE_INFOPLIST_FILE = NO;
-				INFOPLIST_FILE = DayMarksWidgetExtension/Info.plist;
-				LD_RUNPATH_SEARCH_PATHS = (
-					"$(inherited)",
-					"@executable_path/Frameworks",
-					"@executable_path/../../Frameworks",
-				);
-				APPLICATION_EXTENSION_API_ONLY = YES;
-				MARKETING_VERSION = 1.0;
-				PRODUCT_BUNDLE_IDENTIFIER = com.aramco.cycomm.widget;
-				PRODUCT_NAME = "$(TARGET_NAME)";
-				PROVISIONING_PROFILE_SPECIFIER = "$(WIDGET_PROVISIONING_PROFILE_SPECIFIER)";
-				SKIP_INSTALL = YES;
-				SWIFT_EMIT_LOC_STRINGS = YES;
-				SWIFT_VERSION = 5.0;
-				TARGETED_DEVICE_FAMILY = "1,2";
-			};
-			name = Release;
-		};
 /* End XCBuildConfiguration section */
 
 /* Begin XCConfigurationList section */
@@ -505,15 +358,6 @@
 			buildConfigurations = (
 				0E0000000000000000000003 /* Debug */,
 				0E0000000000000000000004 /* Release */,
-			);
-			defaultConfigurationIsVisible = 0;
-			defaultConfigurationName = Release;
-		};
-		0A0000000000000000000002 /* Build configuration list for PBXNativeTarget "DayMarksWidgetExtension" */ = {
-			isa = XCConfigurationList;
-			buildConfigurations = (
-				0E0000000000000000000005 /* Debug */,
-				0E0000000000000000000006 /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;
