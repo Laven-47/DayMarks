@@ -1,0 +1,12 @@
+{
+    "images":  [
+                   {
+                       "filename":  "平平安安封面.png",
+                       "idiom":  "universal"
+                   }
+               ],
+    "info":  {
+                 "author":  "xcode",
+                 "version":  1
+             }
+}
